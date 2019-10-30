@@ -504,8 +504,6 @@ int mt76_get_survey(struct ieee80211_hw *hw, int idx,
 	if (chan == dev->main_chan) {
 		survey->filled |= SURVEY_INFO_IN_USE;
 
-		if (dev->drv->drv_flags & MT_DRV_SW_RX_AIRTIME)
-			survey->filled |= SURVEY_INFO_TIME_BSS_RX;
 	}
 
 	survey->time_busy = div_u64(state->cc_busy, 1000);
@@ -513,7 +511,6 @@ int mt76_get_survey(struct ieee80211_hw *hw, int idx,
 	survey->time = div_u64(state->cc_active, 1000);
 
 	spin_lock_bh(&dev->cc_lock);
-	survey->time_bss_rx = div_u64(state->cc_bss_rx, 1000);
 	survey->time_tx = div_u64(state->cc_tx, 1000);
 	spin_unlock_bh(&dev->cc_lock);
 
