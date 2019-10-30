@@ -3,6 +3,7 @@
  * Copyright (C) 2019 Lorenzo Bianconi <lorenzo@kernel.org>
  */
 
+#include <linux/pci-aspm.h>
 #include <linux/pci.h>
 
 void mt76_pci_disable_aspm(struct pci_dev *pdev)
@@ -28,11 +29,7 @@ void mt76_pci_disable_aspm(struct pci_dev *pdev)
 		 (aspm_conf & PCI_EXP_LNKCTL_ASPM_L1) ? "L1" : "");
 
 	if (IS_ENABLED(CONFIG_PCIEASPM)) {
-		int err;
-
-		err = pci_disable_link_state(pdev, aspm_conf);
-		if (!err)
-			return;
+		pci_disable_link_state(pdev, aspm_conf);
 	}
 
 	/* both device and parent should have the same ASPM setting.
